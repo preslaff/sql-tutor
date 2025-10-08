@@ -1,6 +1,9 @@
 # Environment variables
 .env
 
+# Project documentation
+CLAUDE.md
+
 # Python
 __pycache__/
 *.py[cod]
