@@ -318,11 +318,11 @@ Focus on teaching, not just correcting."""
 
                 if choice == '2':
                     print(f"\n💡 Solution: {query_data['solution']}")
-                    return
+                    break
                 elif choice == '3':
                     feedback = self.get_ai_feedback(query_data, user_query, False)
                     print(f"\n🤖 AI Tutor says:\n{feedback}")
-                    return
+                    break
                 # If choice is '1', continue to next attempt
                 continue
 
@@ -374,12 +374,12 @@ Focus on teaching, not just correcting."""
                         print("\n📚 Understanding the solution...\n")
                         feedback = self.get_ai_feedback(query_data, user_query, False)
                         print(f"🤖 {feedback}")
-                        return
+                        break
                     elif retry != 'y':
                         print("\n📚 Getting detailed feedback...\n")
                         feedback = self.get_ai_feedback(query_data, user_query, False)
                         print(f"🤖 {feedback}")
-                        return
+                        break
                 else:
                     # Max attempts reached
                     print(f"\n⏰ You've used all {max_attempts} attempts.")
@@ -389,7 +389,7 @@ Focus on teaching, not just correcting."""
                     print("\n📚 Getting comprehensive feedback...\n")
                     feedback = self.get_ai_feedback(query_data, user_query, False)
                     print(f"🤖 {feedback}")
-                    return
+                    break
 
         # Continue or exit
         print("\n" + "="*60)
