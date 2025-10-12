@@ -322,7 +322,13 @@ Focus on teaching, not just correcting."""
                 elif choice == '3':
                     feedback = self.get_ai_feedback(query_data, user_query, False)
                     print(f"\n🤖 AI Tutor says:\n{feedback}")
-                    break
+
+                    # Ask if they want to try again with the same lesson
+                    retry = input("\nWould you like to try again? (y/n): ").lower()
+                    if retry == 'y':
+                        continue  # Go back for another attempt
+                    else:
+                        break  # Exit to "Try another question?"
                 # If choice is '1', continue to next attempt
                 continue
 
