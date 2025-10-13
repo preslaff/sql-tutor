@@ -88,21 +88,21 @@
   "intermediate": [
     {
       "id": "i1",
-      "question": "Get total number of orders per customer with customer names",
+      "question": "Get total number of orders per customer with customer names (columns: name, order_count)",
       "solution": "SELECT c.name, COUNT(o.order_id) as order_count FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name;",
       "concepts": ["JOIN", "GROUP BY", "COUNT"],
       "hint": "Use LEFT JOIN to include customers with no orders"
     },
     {
       "id": "i2",
-      "question": "Find the average price of products in each category",
+      "question": "Find the average price of products in each category (columns: category_name, avg_price)",
       "solution": "SELECT c.category_name, ROUND(AVG(p.price), 2) as avg_price FROM categories c JOIN products p ON c.category_id = p.category_id GROUP BY c.category_id, c.category_name;",
       "concepts": ["JOIN", "GROUP BY", "AVG"],
       "hint": "Group by category and use AVG function"
     },
     {
       "id": "i3",
-      "question": "Get the total amount spent by each customer",
+      "question": "Get the total amount spent by each customer (columns: name, total_spent)",
       "solution": "SELECT c.name, COALESCE(SUM(o.total_amount), 0) as total_spent FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name ORDER BY total_spent DESC;",
       "concepts": ["LEFT JOIN", "GROUP BY", "SUM", "COALESCE"],
       "hint": "Use LEFT JOIN and SUM with GROUP BY"
@@ -116,21 +116,21 @@
     },
     {
       "id": "i5",
-      "question": "Get the average rating for each product along with product names",
+      "question": "Get the average rating for each product along with product names (columns: product_name, avg_rating)",
       "solution": "SELECT p.product_name, ROUND(AVG(r.rating), 2) as avg_rating FROM products p JOIN reviews r ON p.product_id = r.product_id GROUP BY p.product_id, p.product_name;",
       "concepts": ["JOIN", "GROUP BY", "AVG"],
       "hint": "Join products and reviews, then group by product"
     },
     {
       "id": "i6",
-      "question": "Find the top 3 customers who have spent the most money",
+      "question": "Find the top 3 customers who have spent the most money (columns: name, total_spent)",
       "solution": "SELECT c.name, SUM(o.total_amount) as total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name ORDER BY total_spent DESC LIMIT 3;",
       "concepts": ["JOIN", "GROUP BY", "SUM", "ORDER BY", "LIMIT"],
       "hint": "Sum order amounts, group by customer, order by total, and limit"
     },
     {
       "id": "i7",
-      "question": "Count how many products are in each category",
+      "question": "Count how many products are in each category (columns: category_name, product_count)",
       "solution": "SELECT c.category_name, COUNT(p.product_id) as product_count FROM categories c LEFT JOIN products p ON c.category_id = p.category_id GROUP BY c.category_id, c.category_name;",
       "concepts": ["LEFT JOIN", "GROUP BY", "COUNT"],
       "hint": "Use LEFT JOIN to include categories with no products"
@@ -144,21 +144,21 @@
     },
     {
       "id": "i9",
-      "question": "Get the total quantity sold for each product",
+      "question": "Get the total quantity sold for each product (columns: product_name, total_sold)",
       "solution": "SELECT p.product_name, SUM(oi.quantity) as total_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id GROUP BY p.product_id, p.product_name ORDER BY total_sold DESC;",
       "concepts": ["JOIN", "GROUP BY", "SUM"],
       "hint": "Join products and order_items, sum quantities"
     },
     {
       "id": "i10",
-      "question": "Find customers who have placed more than 2 orders",
+      "question": "Find customers who have placed more than 2 orders (columns: name, order_count)",
       "solution": "SELECT c.name, COUNT(o.order_id) as order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name HAVING COUNT(o.order_id) > 2;",
       "concepts": ["JOIN", "GROUP BY", "HAVING"],
       "hint": "Use HAVING to filter grouped results"
     },
     {
       "id": "i11",
-      "question": "Get the most recent order date for each customer",
+      "question": "Get the most recent order date for each customer (columns: name, last_order_date)",
       "solution": "SELECT c.name, MAX(o.order_date) as last_order_date FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name;",
       "concepts": ["JOIN", "GROUP BY", "MAX"],
       "hint": "Use MAX function on order_date"
@@ -174,14 +174,14 @@
   "advanced": [
     {
       "id": "a1",
-      "question": "Find products that have above-average ratings using a subquery",
+      "question": "Find products that have above-average ratings using a subquery (columns: product_name, avg_rating)",
       "solution": "SELECT p.product_name, AVG(r.rating) as avg_rating FROM products p JOIN reviews r ON p.product_id = r.product_id GROUP BY p.product_id, p.product_name HAVING AVG(r.rating) > (SELECT AVG(rating) FROM reviews);",
       "concepts": ["subquery", "JOIN", "GROUP BY", "HAVING", "AVG"],
       "hint": "Use a subquery in HAVING clause to compare with overall average"
     },
     {
       "id": "a2",
-      "question": "Get the total revenue generated by each category",
+      "question": "Get the total revenue generated by each category (columns: category_name, total_revenue)",
       "solution": "SELECT c.category_name, SUM(oi.quantity * oi.price_at_purchase) as total_revenue FROM categories c JOIN products p ON c.category_id = p.category_id JOIN order_items oi ON p.product_id = oi.product_id GROUP BY c.category_id, c.category_name ORDER BY total_revenue DESC;",
       "concepts": ["multiple JOINs", "GROUP BY", "SUM", "calculation"],
       "hint": "Join categories, products, and order_items, then calculate revenue"
@@ -195,7 +195,7 @@
     },
     {
       "id": "a4",
-      "question": "Rank products by total revenue within each category",
+      "question": "Rank products by total revenue within each category (columns: category_name, product_name, total_revenue, revenue_rank)",
       "solution": "SELECT category_name, product_name, total_revenue, RANK() OVER (PARTITION BY category_id ORDER BY total_revenue DESC) as revenue_rank FROM (SELECT c.category_id, c.category_name, p.product_name, SUM(oi.quantity * oi.price_at_purchase) as total_revenue FROM categories c JOIN products p ON c.category_id = p.category_id JOIN order_items oi ON p.product_id = oi.product_id GROUP BY c.category_id, c.category_name, p.product_id, p.product_name) ORDER BY category_id, revenue_rank;",
       "concepts": ["window functions", "RANK", "PARTITION BY", "subquery"],
       "hint": "Use RANK() with PARTITION BY category"
@@ -209,35 +209,35 @@
     },
     {
       "id": "a6",
-      "question": "Calculate running total of order amounts for each customer chronologically",
+      "question": "Calculate running total of order amounts for each customer chronologically (columns: name, order_date, total_amount, running_total)",
       "solution": "SELECT c.name, o.order_date, o.total_amount, SUM(o.total_amount) OVER (PARTITION BY c.customer_id ORDER BY o.order_date) as running_total FROM customers c JOIN orders o ON c.customer_id = o.customer_id ORDER BY c.customer_id, o.order_date;",
       "concepts": ["window functions", "SUM", "PARTITION BY", "running total"],
       "hint": "Use SUM() as a window function with PARTITION BY and ORDER BY"
     },
     {
       "id": "a7",
-      "question": "Find customers who haven't ordered anything in the last 30 days",
+      "question": "Find customers who haven't ordered anything in the last 30 days (columns: name, last_order)",
       "solution": "SELECT c.name, MAX(o.order_date) as last_order FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.name HAVING MAX(o.order_date) < DATE('2024-03-25', '-30 days') OR MAX(o.order_date) IS NULL;",
       "concepts": ["LEFT JOIN", "GROUP BY", "HAVING", "date functions", "MAX"],
       "hint": "Use MAX(order_date) and compare with date arithmetic"
     },
     {
       "id": "a8",
-      "question": "Get monthly sales totals using a CTE",
+      "question": "Get monthly sales totals using a CTE (columns: month, monthly_total)",
       "solution": "WITH monthly_sales AS (SELECT strftime('%Y-%m', order_date) as month, SUM(total_amount) as monthly_total FROM orders GROUP BY strftime('%Y-%m', order_date)) SELECT month, monthly_total FROM monthly_sales ORDER BY month;",
       "concepts": ["CTE", "WITH", "date functions", "GROUP BY"],
       "hint": "Use WITH to create a CTE for monthly aggregation"
     },
     {
       "id": "a9",
-      "question": "Find products that have been ordered together (appearing in the same order) most frequently",
+      "question": "Find products that have been ordered together (appearing in the same order) most frequently (columns: product1, product2, times_together)",
       "solution": "SELECT p1.product_name as product1, p2.product_name as product2, COUNT(*) as times_together FROM order_items oi1 JOIN order_items oi2 ON oi1.order_id = oi2.order_id AND oi1.product_id < oi2.product_id JOIN products p1 ON oi1.product_id = p1.product_id JOIN products p2 ON oi2.product_id = p2.product_id GROUP BY p1.product_id, p2.product_id, p1.product_name, p2.product_name ORDER BY times_together DESC LIMIT 10;",
       "concepts": ["self-join", "multiple JOINs", "GROUP BY"],
       "hint": "Self-join order_items on order_id with product_id comparison"
     },
     {
       "id": "a10",
-      "question": "Calculate the percentage of total revenue each category contributes",
+      "question": "Calculate the percentage of total revenue each category contributes (columns: category_name, category_revenue, revenue_percentage)",
       "solution": "SELECT category_name, category_revenue, ROUND(category_revenue * 100.0 / (SELECT SUM(oi.quantity * oi.price_at_purchase) FROM order_items oi), 2) as revenue_percentage FROM (SELECT c.category_name, SUM(oi.quantity * oi.price_at_purchase) as category_revenue FROM categories c JOIN products p ON c.category_id = p.category_id JOIN order_items oi ON p.product_id = oi.product_id GROUP BY c.category_id, c.category_name) ORDER BY revenue_percentage DESC;",
       "concepts": ["subquery", "multiple JOINs", "calculation", "percentage"],
       "hint": "Calculate category revenue and divide by total revenue"
@@ -251,7 +251,7 @@
     },
     {
       "id": "a12",
-      "question": "Create a report showing each customer's favorite category (most orders from)",
+      "question": "Create a report showing each customer's favorite category (most orders from) (columns: name, category_name, order_count)",
       "solution": "SELECT name, category_name, order_count FROM (SELECT c.name, cat.category_name, COUNT(*) as order_count, ROW_NUMBER() OVER (PARTITION BY c.customer_id ORDER BY COUNT(*) DESC) as rn FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id JOIN categories cat ON p.category_id = cat.category_id GROUP BY c.customer_id, c.name, cat.category_id, cat.category_name) WHERE rn = 1;",
       "concepts": ["window functions", "ROW_NUMBER", "PARTITION BY", "multiple JOINs"],
       "hint": "Count orders per category per customer, then use ROW_NUMBER() to get top 1"

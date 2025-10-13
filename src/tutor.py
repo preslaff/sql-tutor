@@ -310,6 +310,10 @@ Focus on teaching, not just correcting."""
                 except:
                     pass
 
+                # Show hint from query data
+                if 'hint' in query_data and query_data['hint']:
+                    print(f"\n💡 Hint: {query_data['hint']}")
+
                 print("\nWould you like to:")
                 print("1. Try again")
                 print("2. See the solution")
@@ -366,14 +370,23 @@ Focus on teaching, not just correcting."""
                 success_sol, results_sol, columns_sol, _ = self.execute_query(query_data['solution'])
                 self.display_results(results_sol, columns_sol)
 
+                # Show hint from query data first
+                if 'hint' in query_data and query_data['hint']:
+                    print(f"\n💡 Hint: {query_data['hint']}")
+
                 # Provide progressive hints based on similarity
                 if attempt < max_attempts:
-                    print(f"\n💡 Generating hint based on your attempt (Attempt {attempt}/{max_attempts})...")
-                    hint = self.get_progressive_hint(query_data, user_query, similarity, attempt)
-                    print(f"\n🔍 Hint: {hint}")
+                    print(f"\n💡 Generating AI hint based on your attempt (Attempt {attempt}/{max_attempts})...")
+                    ai_hint = self.get_progressive_hint(query_data, user_query, similarity, attempt)
+                    print(f"\n🔍 AI Hint: {ai_hint}")
 
-                    retry = input(f"\nWould you like to try again? (y/n/s to see solution): ").lower()
-                    if retry == 's':
+                    print("\nWould you like to:")
+                    print("1. Try again")
+                    print("2. See the solution")
+                    print("3. Get AI help")
+                    choice = input("Enter choice (1/2/3): ")
+
+                    if choice == '2':
                         print(f"\n💡 Solution: {query_data['solution']}")
 
                         # Get AI feedback showing the difference
@@ -381,15 +394,27 @@ Focus on teaching, not just correcting."""
                         feedback = self.get_ai_feedback(query_data, user_query, False)
                         print(f"🤖 {feedback}")
                         break
-                    elif retry != 'y':
+                    elif choice == '3':
                         print("\n📚 Getting detailed feedback...\n")
                         feedback = self.get_ai_feedback(query_data, user_query, False)
                         print(f"🤖 {feedback}")
-                        break
+
+                        # Ask if they want to try again
+                        retry = input("\nWould you like to try again? (y/n): ").lower()
+                        if retry == 'y':
+                            continue
+                        else:
+                            break
+                    # If choice is '1', continue to next attempt
                 else:
                     # Max attempts reached
                     print(f"\n⏰ You've used all {max_attempts} attempts.")
-                    print(f"💡 Solution: {query_data['solution']}")
+
+                    # Show hint from query data
+                    if 'hint' in query_data and query_data['hint']:
+                        print(f"\n💡 Hint: {query_data['hint']}")
+
+                    print(f"\n💡 Solution: {query_data['solution']}")
 
                     # Get comprehensive feedback
                     print("\n📚 Getting comprehensive feedback...\n")
